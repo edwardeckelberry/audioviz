@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as dat from 'dat.gui';
 
 //every screen needs a renderer (and its size), a body, scene, and camera
 const renderer = new THREE.WebGLRenderer();
@@ -59,11 +60,38 @@ const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.position.set(-10,0,0);
 
-function animate() {
+//can control colors of any object (in this case, the sphere)
+const gui = new dat.GUI();
 
-  cube.rotation.x += 0.02;
-  cube.rotation.y += 0.02;
+//can make properties using inherent properties on object
+//using lambda functions
+const options = {
+  sphereColor: '#ffea00',
+  wireframe: false,
+  speed: 0.01
+};
 
+gui.addColor(options, 'sphereColor').onChange(function(e){
+  sphere.material.color.set(e);
+});
+
+gui.add(options, 'wireframe').onChange(function(e){
+  sphere.material.wireframe = e;
+});
+
+//0 is min speed, 0.1 is max speed
+gui.add(options, 'speed', 0, 0.1);
+
+let step = 0;
+let speed = 0.01;
+
+function animate(time) {
+
+  cube.rotation.x = time /1000;
+  cube.rotation.y = time /1000;
+
+  step += options.speed;
+  sphere.position.y = 10 * Math.abs(Math.sin(step));
   renderer.render( scene, camera );
 
 }
