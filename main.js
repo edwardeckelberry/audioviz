@@ -38,7 +38,7 @@ const cube = new THREE.Mesh( geometry, material );
 scene.add(cube);
 
 const planeGeometry = new THREE.PlaneGeometry(30,30);
-const planeMaterial = new THREE.MeshBasicMaterial({
+const planeMaterial = new THREE.MeshStandardMaterial({
   color: 0xFFFFFF,
   //needs side or else only exists on one side
   side: THREE.DoubleSide
@@ -51,7 +51,7 @@ plane.rotation.x = -0.5 * Math.PI;
 //first no. is size, then the other is the amount of x and y segments
 const sphereGeometry = new THREE.SphereGeometry(4, 40, 40);
 //MeshStandardMaterial needs light to show up, basic doesn't need it
-const sphereMaterial = new THREE.MeshBasicMaterial({
+const sphereMaterial = new THREE.MeshStandardMaterial({
   color: 0xFF00FF,
   //this shows the frame of the sphere
   wireframe: false
@@ -59,6 +59,16 @@ const sphereMaterial = new THREE.MeshBasicMaterial({
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.position.set(-10,0,0);
+
+const ambientLight = new THREE.AmbientLight(0x333333);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+scene.add(directionalLight);
+directionalLight.position.set(-30,50,0);
+
+const dLightHelper = new THREE.DirectionalLightHelper(directionalLight);
+scene.add(dLightHelper);
 
 //can control colors of any object (in this case, the sphere)
 const gui = new dat.GUI();
