@@ -5,6 +5,8 @@ import * as dat from 'dat.gui';
 //every screen needs a renderer (and its size), a body, scene, and camera
 const renderer = new THREE.WebGLRenderer();
 
+renderer.shadowMap.enabled = true;
+
 renderer.setSize( window.innerWidth, window.innerHeight );
 
 document.body.appendChild( renderer.domElement );
@@ -47,6 +49,7 @@ const plane = new THREE.Mesh(planeGeometry,planeMaterial);
 scene.add(plane);
 //moves plane 90 degrees
 plane.rotation.x = -0.5 * Math.PI;
+plane.receiveShadow = true;
 
 //first no. is size, then the other is the amount of x and y segments
 const sphereGeometry = new THREE.SphereGeometry(4, 40, 40);
@@ -59,6 +62,7 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.position.set(-10,0,0);
+sphere.castShadow = true;
 
 const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
@@ -66,9 +70,14 @@ scene.add(ambientLight);
 const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
 scene.add(directionalLight);
 directionalLight.position.set(-30,50,0);
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.bottom = -12;
 
 const dLightHelper = new THREE.DirectionalLightHelper(directionalLight);
 scene.add(dLightHelper);
+
+const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+scene.add(dLightShadowHelper);
 
 //can control colors of any object (in this case, the sphere)
 const gui = new dat.GUI();
